@@ -60,17 +60,21 @@
                 <Label Content="Database Names" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="2" Grid.Column="0" />
                 <ComboBox Grid.Row="2" Grid.Column="1" Name="DatabaseNamesComboBox" Padding="4"
                           ItemsSource="{Binding Path=DatabaseNames}" SelectedIndex="0"></ComboBox>
-                <Button Content="Generate Reports" Width="Auto"  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="62,16,312,10"/>
+                <Button Content="Generate Reports" Width="Auto"  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="62,16,312,10" Click="Button_Click"/>
                 <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0" Name="MessagePanel">
                     <TextBlock Name="DisplayMessageBox" ></TextBlock>
-                    <ProgressBar Minimum="0" Maximum="100" Name="pbStatus" />
                 </StackPanel>
             </Grid>
         </GroupBox>
         <Canvas Grid.Row="3" >
-            <TabControl Width="750">
+            <TabControl Width="750" Name="ReportTabs">
                 <TabItem Header="Test Cases Checklist">
-                    <DataGrid Name="TestCaseSet" Height="Auto" Width="Auto" AutoGenerateColumns="True" ItemsSource="{Binding TestCaseList}"></DataGrid>
+                    <DataGrid Name="TestCaseSet" Height="Auto" Width="Auto" AutoGenerateColumns="False" ItemsSource="{Binding TestCaseList}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="UID Matrix Test Case" Width="Auto" IsReadOnly="True"
+                                               Binding="{Binding TestCaseName}"></DataGridTextColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </TabItem>
             </TabControl>
         </Canvas>

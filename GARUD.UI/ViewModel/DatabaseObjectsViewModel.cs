@@ -16,6 +16,21 @@ namespace GARUD_UI.ViewModel
 
         private List<String> _dbNamesList;
         private String _instanceName;
+        private String _catalogName;
+
+        public String CatalogName
+        {
+            get { return _catalogName; }
+            set 
+            {
+                _catalogName = value;
+                if (!String.IsNullOrEmpty(value))
+                {
+                    GetModelDetails();
+                    GetTestCases();
+                } 
+           }
+        }
         private ObservableCollection<TestCase> _testCaseList;
 
         public ObservableCollection<TestCase> TestCaseList
@@ -33,6 +48,7 @@ namespace GARUD_UI.ViewModel
                 if(!String.IsNullOrEmpty(value))
                 {
                     GetModelDetails();
+                    GetDBNames();
                 }
             }
         }
@@ -48,13 +64,16 @@ namespace GARUD_UI.ViewModel
 
             }
         }
-
+        public DatabaseObjectsViewModel()
+        {
+            _catalogName = "master";
+        }
         private void GetModelDetails()
         {
             var str = new SqlConnectionStringBuilder
             {
                 DataSource = InstanceName,
-                InitialCatalog = "master",
+                InitialCatalog = _catalogName,
                 IntegratedSecurity = true
 
             };
@@ -64,10 +83,25 @@ namespace GARUD_UI.ViewModel
             {
                 _modelEntity = _modelObject.GetDatabaseObjects();
             }
+            
+        }
+
+        
+        private void GetDBNames()
+        {
             if (_modelEntity != null)
             {
                 DatabaseNames = _modelEntity.DatabaseNamesList;
+                
+            }
+        }
+
+        private void GetTestCases()
+        {
+            if (_modelEntity != null)
+            {
                 TestCaseList = _modelEntity.TestCaseList;
+
             }
         }
 
