@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using GARUD_UI.ViewModel;
+using System.Threading;
 
 namespace GARUD_UI.View
 {
@@ -19,14 +20,18 @@ namespace GARUD_UI.View
          
 
         }
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
+       
+
+        private void DatabaseInstanceTextBox_LostFocus(object sender, RoutedEventArgs e)
         {
-            if(!string.IsNullOrEmpty(DatabaseInstanceTextBox.Text))
+            if (!string.IsNullOrEmpty(DatabaseInstanceTextBox.Text))
             {
                 _dataViewModel = (DatabaseObjectsViewModel)base.DataContext;
                 _dataViewModel.InstanceName = DatabaseInstanceTextBox.Text;
             }
         }
+
+       
     }
 
    

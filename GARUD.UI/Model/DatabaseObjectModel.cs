@@ -26,10 +26,13 @@ namespace GARUD_UI.Model
             {
                 _databaseObject.DatabaseNamesList = _dataAccess.GetAllDatabases();
             }
-            finally
+            catch(Exception ex)
             {
-                Logger.Log("BeginProcess: Database Names Loaded");
+                Logger.Log("Exception Log GetDatabaseObjects", ex);
+                 _databaseObject.DatabaseNamesList = new List<String> { "Dinesh", "Sample" };
+                 Logger.Log("BeginProcess: Default Names Loaded");
             }
+           
             return _databaseObject;
         }
     }

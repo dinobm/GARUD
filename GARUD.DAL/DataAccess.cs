@@ -89,7 +89,7 @@ namespace GARUD.DAL
             }
             catch (SqlException sqlEx)
             {
-                return new List<String> { "Dinesh", "Sample" };
+                throw;
             }
             finally
             {
