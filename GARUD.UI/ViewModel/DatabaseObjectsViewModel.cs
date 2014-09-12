@@ -49,6 +49,7 @@ namespace GARUD_UI.ViewModel
                 {
                     GetModelDetails();
                     GetDBNames();
+                    GetTestCases();
                 }
             }
         }

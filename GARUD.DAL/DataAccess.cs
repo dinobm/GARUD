@@ -123,7 +123,7 @@ namespace GARUD.DAL
                 queryBuilder.Append(" FROM PrimaryKeyValidator UNION SELECT TABLE_SCHEMA, Table_Name, ");
                 queryBuilder.Append("'Check Foreign Key for ' + COLUMN_NAME + ' in the ' + TABLE_SCHEMA + '.'+ TABLE_NAME FROM ForeignKeyValidator ");
                 queryBuilder.Append(" UNION SELECT TABLE_SCHEMA, Table_Name, 'Check Unique Constraint For ' + COLUMN_NAME + ' in the ' + TABLE_SCHEMA + '.'+ TABLE_NAME FROM uniqueValidator )");
-                queryBuilder.Append("SELECT * FROM GARUDMatrix ORDER BY TABLE_SCHEMA, Table_Name");
+                queryBuilder.Append("SELECT TABLE_SCHEMA TableSchema, Table_Name TableName, TestCase FROM GARUDMatrix ORDER BY TABLE_SCHEMA, Table_Name");
                 var cmd = new SqlCommand(queryBuilder.ToString(), _dbConnection);
                 var dataAdapt = new SqlDataAdapter();
                 dataAdapt.SelectCommand = cmd;

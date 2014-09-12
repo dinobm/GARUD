@@ -16,9 +16,7 @@ namespace GARUD_UI.View
         public MainWindow()
         {
             InitializeComponent();
-            //_dataViewModel = (DatabaseObjectsViewModel)base.DataContext;
-            //_dataViewModel.InstanceName = ".";
-         
+           
 
         }
        
@@ -29,6 +27,16 @@ namespace GARUD_UI.View
             {
                 _dataViewModel = (DatabaseObjectsViewModel)base.DataContext;
                 _dataViewModel.InstanceName = DatabaseInstanceTextBox.Text;
+            }
+            if (_dataViewModel.TestCaseList.Count == 0)
+            {
+                ReportTabs.Visibility = System.Windows.Visibility.Collapsed;
+                DisplayMessageBox.Text = "No Test Scenarios can be suggested as GARUD did not find any database constraints to evaluate";
+            }
+            else
+            {
+                ReportTabs.Visibility = System.Windows.Visibility.Visible;
+                DisplayMessageBox.Text = String.Empty;
             }
         }
 
@@ -41,12 +49,13 @@ namespace GARUD_UI.View
             }
             if (_dataViewModel.TestCaseList.Count == 0)
             {
-                TestCaseSet.Visibility = System.Windows.Visibility.Collapsed;
-                DisplayMessageBox.Text = "No Test Scenarios can be suggested as GARD did not find any database constraints to evaluate";
+                ReportTabs.Visibility = System.Windows.Visibility.Collapsed;
+                DisplayMessageBox.Text = "No Test Scenarios can be suggested as GARUD did not find any database constraints to evaluate";
             }
             else
             {
-                TestCaseSet.Visibility = System.Windows.Visibility.Visible;
+                ReportTabs.Visibility = System.Windows.Visibility.Visible;
+                DisplayMessageBox.Text = String.Empty;
             }
         }
 

@@ -34,6 +34,7 @@ namespace GARUD_UI.Model
             {
                 Logger.Log("Exception Log GetDatabaseObjects", ex);
                  _databaseObject.DatabaseNamesList = new List<String> { "Dinesh", "Sample" };
+                 _databaseObject.TestCaseList = new ObservableCollection<TestCase>() {new TestCase(){TableName = "SampleTable", SchemaName="dbo", TestCaseName="Check Constraint"} };
                  Logger.Log("BeginProcess: Default Names Loaded");
             }
            
@@ -46,15 +47,15 @@ namespace GARUD_UI.Model
             try
             {
                 var returnTable = _dataAccess.GenerateTestCaseReport();
-                if (returnTable != null && returnTable.Rows.Count > 0)
+                if (returnTable != null)
                 {
                     foreach (DataRow eachRow in returnTable.Rows)
                     {
 
                         var testCaseSet = new TestCase()
                         {
-                            TableName = Convert.ToString(eachRow["Table_Name"]),
-                            SchemaName = Convert.ToString(eachRow["Table_Schema"]),
+                            TableName = Convert.ToString(eachRow["TableName"]),
+                            SchemaName = Convert.ToString(eachRow["TableSchema"]),
                             TestCaseName = Convert.ToString(eachRow["TestCase"])
                         };
                         testCaseCollection.Add(testCaseSet);
