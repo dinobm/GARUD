@@ -15,7 +15,7 @@ namespace GARUD_UI.View
         public MainWindow()
         {
             InitializeComponent();
-            _dataViewModel = (DatabaseObjectsViewModel)base.DataContext;
+            //_dataViewModel = (DatabaseObjectsViewModel)base.DataContext;
             //_dataViewModel.InstanceName = ".";
          
 

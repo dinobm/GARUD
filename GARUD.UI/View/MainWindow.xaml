@@ -70,7 +70,7 @@
         <Canvas Grid.Row="3" >
             <TabControl Width="750">
                 <TabItem Header="Test Cases Checklist">
-                    <DataGrid Name="TestCaseSet" Height="Auto" Width="Auto"></DataGrid>
+                    <DataGrid Name="TestCaseSet" Height="Auto" Width="Auto" AutoGenerateColumns="True" ItemsSource="{Binding TestCaseList}"></DataGrid>
                 </TabItem>
             </TabControl>
         </Canvas>

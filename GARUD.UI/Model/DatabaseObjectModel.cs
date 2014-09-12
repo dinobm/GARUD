@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using GARUD.Common;
 using GARUD.DAL;
 using GARUD.Entity;
+using System.Collections.ObjectModel;
+using System.Data;
 
 namespace GARUD_UI.Model
 {
@@ -25,6 +27,8 @@ namespace GARUD_UI.Model
             try
             {
                 _databaseObject.DatabaseNamesList = _dataAccess.GetAllDatabases();
+                //Build TestCase List
+                GenerateTestCase();
             }
             catch(Exception ex)
             {
@@ -34,6 +38,35 @@ namespace GARUD_UI.Model
             }
            
             return _databaseObject;
+        }
+
+        private void GenerateTestCase()
+        {
+            var testCaseCollection = new ObservableCollection<TestCase>();
+            try
+            {
+                var returnTable = _dataAccess.GenerateTestCaseReport();
+                if (returnTable != null && returnTable.Rows.Count > 0)
+                {
+                    foreach (DataRow eachRow in returnTable.Rows)
+                    {
+
+                        var testCaseSet = new TestCase()
+                        {
+                            TableName = Convert.ToString(eachRow["Table_Name"]),
+                            SchemaName = Convert.ToString(eachRow["Table_Schema"]),
+                            TestCaseName = Convert.ToString(eachRow["TestCase"])
+                        };
+                        testCaseCollection.Add(testCaseSet);
+
+                    }
+                }
+                _databaseObject.TestCaseList = testCaseCollection;
+            }
+            finally
+            {
+
+            }
         }
     }
 }
