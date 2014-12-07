@@ -6,7 +6,7 @@
     <Window.DataContext>
         <local:DatabaseObjectsViewModel></local:DatabaseObjectsViewModel>
     </Window.DataContext>
-    <Grid Name="OuterLayer" ShowGridLines="True">
+    <Grid Name="OuterLayer" ShowGridLines="False">
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" />
             <RowDefinition Height="Auto" />
@@ -16,8 +16,11 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="GARUD" FontFamily="Calibri" FontSize="27" Grid.Row="0" FontStyle="Italic" ToolTip="Generate Database Matrix Testcases"
+        <StackPanel Orientation="Horizontal" Name="HeaderPanel">
+            <Image Source="../Images/Icon.jpg"></Image>
+        <Label Content="GARUD - Database Validator" FontFamily="Calibri" FontSize="27" Grid.Row="0" FontStyle="Italic" ToolTip="Generate Database Matrix Testcases"
                FontWeight="Bold" />
+        </StackPanel>
 
         <Border Padding="3" BorderBrush="LightGray" Grid.Row="1" Grid.Column="0" Width="Auto">
             <Grid Name="InputDataGrid">
@@ -25,11 +28,11 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="0.165*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.15*"></ColumnDefinition>
                     <ColumnDefinition Width="0.2*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.3*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label Content="Database Instance: " Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"   />
                 <TextBox  Name="DatabaseInstanceTextBox" LostFocus="DatabaseInstanceTextBox_LostFocus" Width="150" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" >
@@ -58,7 +61,7 @@
                 </TextBox>
 
                 <Label Content="Databases" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"   />
-                <ComboBox  Name="DatabaseNamesComboBox" Width="125" HorizontalAlignment="Left"
+                <ComboBox  Name="DatabaseNamesComboBox" Width="150" HorizontalAlignment="Left"
                           ItemsSource="{Binding Path=DatabaseNames}" Grid.Row="0" Grid.Column="3"></ComboBox >
                 <Button Content="Generate Reports"   Click="Button_Click" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4" />
 
