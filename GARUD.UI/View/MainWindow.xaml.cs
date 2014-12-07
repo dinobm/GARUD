@@ -27,6 +27,7 @@ namespace GARUD_UI.View
             {
                 _dataViewModel = (DatabaseObjectsViewModel)base.DataContext;
                 _dataViewModel.InstanceName = DatabaseInstanceTextBox.Text;
+                _dataViewModel.RefreshScreen();
             }
             if (_dataViewModel.TestCaseList.Count == 0)
             {
@@ -46,6 +47,7 @@ namespace GARUD_UI.View
             {
                 _dataViewModel = (DatabaseObjectsViewModel)base.DataContext;
                 _dataViewModel.CatalogName = Convert.ToString(DatabaseNamesComboBox.SelectedValue);
+                _dataViewModel.RefreshScreen();
             }
             if (_dataViewModel.TestCaseList.Count == 0)
             {

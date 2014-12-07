@@ -14,31 +14,45 @@ namespace GARUD_UI.Model
     public class DatabaseObjectModel
     {
         private readonly DataAccess _dataAccess;
-        private readonly DatabaseObject _databaseObject;
+        private List<String> _dbNamesList;
+
+        public List<String> DbNamesList
+        {
+            get { return _dbNamesList; }
+            set { _dbNamesList = value; }
+        }
+        private ObservableCollection<TestCase> _testCaseList;
+
+        public ObservableCollection<TestCase> TestCaseList
+        {
+            get { return _testCaseList; }
+            set { _testCaseList = value; }
+        }
+        //private readonly DatabaseObject _databaseObject;
 
         public DatabaseObjectModel(string connectionString)
         {
             _dataAccess = new DataAccess(connectionString);
-            _databaseObject = new DatabaseObject();
+            GetDatabaseObjects();
         }
 
-        public DatabaseObject GetDatabaseObjects()
+        public void GetDatabaseObjects()
         {
             try
             {
-                _databaseObject.DatabaseNamesList = _dataAccess.GetAllDatabases();
+                _dbNamesList = _dataAccess.GetAllDatabases();
                 //Build TestCase List
                 GenerateTestCase();
             }
             catch(Exception ex)
             {
                 Logger.Log("Exception Log GetDatabaseObjects", ex);
-                 _databaseObject.DatabaseNamesList = new List<String> { "Dinesh", "Sample" };
-                 _databaseObject.TestCaseList = new ObservableCollection<TestCase>() {new TestCase(){TableName = "SampleTable", SchemaName="dbo", TestCaseName="Check Constraint"} };
+                _dbNamesList = new List<String> { "Dinesh", "Sample" };
+                _testCaseList = new ObservableCollection<TestCase>() { new TestCase() { TableName = "SampleTable", SchemaName = "dbo", TestCaseName = "Check Constraint" } };
                  Logger.Log("BeginProcess: Default Names Loaded");
             }
            
-            return _databaseObject;
+           
         }
 
         private void GenerateTestCase()
@@ -62,7 +76,7 @@ namespace GARUD_UI.Model
 
                     }
                 }
-                _databaseObject.TestCaseList = testCaseCollection;
+                _testCaseList = testCaseCollection;
             }
             finally
             {

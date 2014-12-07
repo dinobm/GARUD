@@ -12,25 +12,9 @@ namespace GARUD_UI.ViewModel
     public class DatabaseObjectsViewModel : INotifyPropertyChanged
     {
         private DatabaseObjectModel _modelObject;
-        private DatabaseObject _modelEntity;
-
         private List<String> _dbNamesList;
         private String _instanceName;
-        private String _catalogName;
-
-        public String CatalogName
-        {
-            get { return _catalogName; }
-            set 
-            {
-                _catalogName = value;
-                if (!String.IsNullOrEmpty(value))
-                {
-                    GetModelDetails();
-                    GetTestCases();
-                } 
-           }
-        }
+        private String _catalogName;      
         private ObservableCollection<TestCase> _testCaseList;
 
         public ObservableCollection<TestCase> TestCaseList
@@ -39,18 +23,23 @@ namespace GARUD_UI.ViewModel
             set { _testCaseList = value; RaisePropertyChanged("TestCaseList"); }
         }
 
+        public String CatalogName
+        {
+            get { return _catalogName; }
+            set
+            {
+                _catalogName = value;
+
+            }
+        }
+
         public String InstanceName
         {
             get { return _instanceName; }
-            set 
+            set
             {
-                _instanceName = value; 
-                if(!String.IsNullOrEmpty(value))
-                {
-                    GetModelDetails();
-                    GetDBNames();
-                    GetTestCases();
-                }
+                _instanceName = value;
+
             }
         }
 
@@ -65,10 +54,12 @@ namespace GARUD_UI.ViewModel
 
             }
         }
+
         public DatabaseObjectsViewModel()
         {
             _catalogName = "master";
         }
+
         private void GetModelDetails()
         {
             var str = new SqlConnectionStringBuilder
@@ -82,31 +73,14 @@ namespace GARUD_UI.ViewModel
                 _modelObject = new DatabaseObjectModel(str.ConnectionString);
             if (_modelObject != null)
             {
-                _modelEntity = _modelObject.GetDatabaseObjects();
+                DatabaseNames = _modelObject.DbNamesList;
+                TestCaseList = _modelObject.TestCaseList;
             }
-            
+
         }
 
-        
-        private void GetDBNames()
-        {
-            if (_modelEntity != null)
-            {
-                DatabaseNames = _modelEntity.DatabaseNamesList;
-                
-            }
-        }
 
-        private void GetTestCases()
-        {
-            if (_modelEntity != null)
-            {
-                TestCaseList = _modelEntity.TestCaseList;
-
-            }
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;       
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void RaisePropertyChanged(string propertyName)
         {
@@ -118,7 +92,15 @@ namespace GARUD_UI.ViewModel
             }
         }
 
+        public void RefreshScreen()
+        {
+            GetModelDetails();          
+           
+        }
+
+      
+
     }
 
- 
+
 }

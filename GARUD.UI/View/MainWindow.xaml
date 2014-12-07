@@ -2,37 +2,37 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:local="clr-namespace:GARUD_UI.ViewModel"
-        Title="GARUD.UI" Width="800" Height="500"  >
+        Title="GARUD.UI" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke" >
     <Window.DataContext>
         <local:DatabaseObjectsViewModel></local:DatabaseObjectsViewModel>
     </Window.DataContext>
-    <Grid Name="OuterLayer">
+    <Grid Name="OuterLayer" ShowGridLines="True">
         <Grid.RowDefinitions>
+            <RowDefinition Height="0.1*" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="0.6*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="500*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Content="GARUD" HorizontalAlignment="Left" VerticalAlignment="Top" FontFamily="Calibri" FontSize="26.667" Grid.Row="0" 
+        <Label Content="GARUD" FontFamily="Calibri" FontSize="27" Grid.Row="0" FontStyle="Italic" ToolTip="Generate Database Matrix Testcases"
                FontWeight="Bold" />
-        <GroupBox Header="Configuration" Grid.Row="1" Grid.Column="0">
-            <Grid Name="ConfigLayer">
+
+        <Border Padding="3" BorderBrush="LightGray" Grid.Row="1" Grid.Column="0" Width="Auto">
+            <Grid Name="InputDataGrid">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="500*"/>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-
-                <Label Content="Database Instance" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="1" Grid.Column="0"  />
-                <TextBox Grid.Row="1" Grid.Column="1" Width="200" Name="DatabaseInstanceTextBox" LostFocus="DatabaseInstanceTextBox_LostFocus" >
+                <Label Content="Database Instance: " Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"   />
+                <TextBox  Name="DatabaseInstanceTextBox" LostFocus="DatabaseInstanceTextBox_LostFocus" Width="150" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" >
                     <TextBox.Style>
                         <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                             <Style.Resources>
@@ -57,19 +57,24 @@
                     </TextBox.Style>
                 </TextBox>
 
-                <Label Content="Database Names" HorizontalAlignment="Left" VerticalAlignment="Top"  Grid.Row="2" Grid.Column="0" />
-                <ComboBox Grid.Row="2" Grid.Column="1" Name="DatabaseNamesComboBox" Padding="4"
-                          ItemsSource="{Binding Path=DatabaseNames}"></ComboBox>
-                <Button Content="Generate Reports" Width="Auto"  Grid.Row="1" Grid.Column="2" Grid.RowSpan="2" Margin="62,16,312,10" Click="Button_Click"/>
-                <StackPanel Grid.Row="3" Grid.ColumnSpan="3" Grid.Column="0" Name="MessagePanel">
-                    <TextBlock Name="DisplayMessageBox" ></TextBlock>
-                </StackPanel>
+                <Label Content="Databases" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"   />
+                <ComboBox  Name="DatabaseNamesComboBox" Width="125" HorizontalAlignment="Left"
+                          ItemsSource="{Binding Path=DatabaseNames}" Grid.Row="0" Grid.Column="3"></ComboBox >
+                <Button Content="Generate Reports"   Click="Button_Click" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4" />
+
             </Grid>
-        </GroupBox>
-        <Canvas Grid.Row="3" >
-            <TabControl Width="750" Name="ReportTabs" Visibility="Collapsed">
+
+        </Border>
+            
+        
+        
+        <StackPanel Grid.Row="2">
+            <TextBlock Name="DisplayMessageBox"></TextBlock>
+        </StackPanel>
+        
+         <TabControl Name="ReportTabs" Grid.Row="3" Width="Auto" Height="Auto">
                 <TabItem Header="Test Cases Checklist">
-                    <DataGrid Name="TestCaseSet" Height="Auto" Width="Auto" AutoGenerateColumns="False" ItemsSource="{Binding TestCaseList}" >
+                    <DataGrid Name="TestCaseSet" AutoGenerateColumns="False" ItemsSource="{Binding TestCaseList}" >
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="UID Matrix Test Case" Width="*" IsReadOnly="True"
                                                Binding="{Binding TestCaseName}"></DataGridTextColumn>
@@ -77,6 +82,6 @@
                     </DataGrid>
                 </TabItem>
             </TabControl>
-        </Canvas>
+        
     </Grid>
 </Window>
