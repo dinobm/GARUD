@@ -24,13 +24,13 @@ namespace GARUD_UI.ViewModel
             set
             {
                 _columnDesignEvaluation = value;
-                RaisePropertyChanged("ColumnDesignEvaluation");
+                
             }
         }
         public ObservableCollection<TablesValidation> TestCaseList
         {
             get { return _testCaseList; }
-            set { _testCaseList = value; RaisePropertyChanged("TestCaseList"); }
+            set { _testCaseList = value;  }
         }
 
         public String CatalogName
@@ -88,22 +88,20 @@ namespace GARUD_UI.ViewModel
             DisplayMessage = string.Empty;
             //init to default values
             InstanceName = ".";
-            CatalogName = "master";
+            CatalogName = string.Empty;
             _modelObject = new DatabaseObjectModel();
             TestCaseList = new ObservableCollection<TablesValidation>();
             ColumnDesignEvaluation = new ObservableCollection<ColumnDesignCheck>();
-            //Load Databases for default collection
-            GetModelDetails();            
-            
+            GetCatalogDetails();
             LoadEvaluationResults();
         }
 
-        public void GetModelDetails()
+        public void GetCatalogDetails()
         {
             var str = new SqlConnectionStringBuilder
             {
                 DataSource = InstanceName,
-                InitialCatalog = CatalogName,
+                InitialCatalog = String.IsNullOrEmpty(CatalogName) ? "ReportServer" : CatalogName,
                 IntegratedSecurity = true
 
             };
@@ -111,19 +109,21 @@ namespace GARUD_UI.ViewModel
                 
             if (_modelObject != null)
             {
-                _modelObject.ConnectionString = str.ToString();
+                _modelObject.GetCatalogInfo(str.ConnectionString);
                 DatabaseNames = _modelObject.DbNamesList;
-                
+               
             }
 
         }
 
         public void LoadEvaluationResults()
         {
+            TestCaseList.Clear();
+            ColumnDesignEvaluation.Clear();
             var str = new SqlConnectionStringBuilder
             {
                 DataSource = InstanceName,
-                InitialCatalog = _catalogName,
+                InitialCatalog = String.IsNullOrEmpty(CatalogName) ? "ReportServer" : CatalogName,
                 IntegratedSecurity = true
 
             };
@@ -131,8 +131,9 @@ namespace GARUD_UI.ViewModel
 
                 if (_modelObject != null)
                 {
-                    _modelObject.ConnectionString = str.ToString();
-                    _modelObject.RunValidationReport();
+                    
+
+                    _modelObject.RunValidationReport(str.ConnectionString);
                     //Add each item from Model to TC Collection
                     _modelObject.ValidationList.ForEach(TestCaseList.Add);
                     //Add each item from Model to Column Validation

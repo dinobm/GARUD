@@ -35,28 +35,30 @@ namespace GARUD_UI.Model
             set { _columnDesignEvaluation = value; }
         }
 
-        public string ConnectionString { get; set; }
+        public void GetCatalogInfo(string connectionString)
+        {
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                _dataAccess.ConnectionString = connectionString;
+                 _dbNamesList = _dataAccess.GetAllDatabases();
+            }
+        }
 
         public DatabaseObjectModel()
         {
             _dataAccess = new DataAccess();
-            ConnectionString = string.Empty;
-            //Initialize the model lists
+             //Initialize the model lists
             _columnDesignEvaluation = new List<ColumnDesignCheck>();
             _validationList = new List<TablesValidation>();
         }
 
-        public void RunValidationReport()
+        public void RunValidationReport(string connectionString)
         {
             try
             {
-                if (!string.IsNullOrEmpty(ConnectionString))
-                {
-                    _dataAccess.ConnectionString = ConnectionString;
-                    _dbNamesList = _dataAccess.GetAllDatabases();
-                    if (_dbNamesList != null)
-                        BuildEvaluationResults();
-                }
+                _dataAccess.ConnectionString = connectionString;
+                if (_dbNamesList != null)
+                    BuildEvaluationResults();               
             }
             catch(Exception ex)
             {
@@ -72,6 +74,8 @@ namespace GARUD_UI.Model
         {
             try
             {
+                _validationList.Clear();
+                _columnDesignEvaluation.Clear();
                 var returnTable = _dataAccess.GenerateValidationReport("TestCaseQuery");
                 if (returnTable != null)
                 {

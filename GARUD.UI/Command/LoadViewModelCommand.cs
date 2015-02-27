@@ -26,7 +26,7 @@ namespace GARUD_UI.Command
 
                     if (dataVM != null)
                     {
-                        dataVM.GetModelDetails();
+                        //dataVM.GetCatalogDetails();
                         dataVM.LoadEvaluationResults();
                     }
                 }
