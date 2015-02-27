@@ -89,14 +89,16 @@ namespace GARUD_UI.ViewModel
             //init to default values
             InstanceName = ".";
             CatalogName = "master";
-            GetModelDetails(); //Load Databases for default collection
-            _modelObject = new DatabaseObjectModel();            
+            _modelObject = new DatabaseObjectModel();
             TestCaseList = new ObservableCollection<TablesValidation>();
             ColumnDesignEvaluation = new ObservableCollection<ColumnDesignCheck>();
+            //Load Databases for default collection
+            GetModelDetails();            
+            
             LoadEvaluationResults();
         }
 
-        private void GetModelDetails()
+        public void GetModelDetails()
         {
             var str = new SqlConnectionStringBuilder
             {
@@ -110,14 +112,13 @@ namespace GARUD_UI.ViewModel
             if (_modelObject != null)
             {
                 _modelObject.ConnectionString = str.ToString();
-                _modelObject.RunValidationReport();
                 DatabaseNames = _modelObject.DbNamesList;
                 
             }
 
         }
 
-        private void LoadEvaluationResults()
+        public void LoadEvaluationResults()
         {
             var str = new SqlConnectionStringBuilder
             {
