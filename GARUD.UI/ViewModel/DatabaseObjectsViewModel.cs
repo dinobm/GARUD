@@ -11,13 +11,23 @@ namespace GARUD_UI.ViewModel
 {
     public class DatabaseObjectsViewModel : INotifyPropertyChanged
     {
-        private DatabaseObjectModel _modelObject;
+        private readonly DatabaseObjectModel _modelObject;
         private List<String> _dbNamesList;
         private String _instanceName;
         private String _catalogName;      
-        private ObservableCollection<TestCase> _testCaseList;
-
-        public ObservableCollection<TestCase> TestCaseList
+        private ObservableCollection<TablesValidation> _testCaseList;
+        private string _displayMessage;
+        private ObservableCollection<ColumnDesignCheck> _columnDesignEvaluation;
+        public ObservableCollection<ColumnDesignCheck> ColumnDesignEvaluation
+        {
+            get { return _columnDesignEvaluation; }
+            set
+            {
+                _columnDesignEvaluation = value;
+                RaisePropertyChanged("ColumnDesignEvaluation");
+            }
+        }
+        public ObservableCollection<TablesValidation> TestCaseList
         {
             get { return _testCaseList; }
             set { _testCaseList = value; RaisePropertyChanged("TestCaseList"); }
@@ -29,6 +39,10 @@ namespace GARUD_UI.ViewModel
             set
             {
                 _catalogName = value;
+                if (_catalogName != null)
+                {
+                    RaisePropertyChanged("CatalogName");
+                }
 
             }
         }
@@ -39,6 +53,8 @@ namespace GARUD_UI.ViewModel
             set
             {
                 _instanceName = value;
+              
+               RaisePropertyChanged("InstanceName");
 
             }
         }
@@ -55,12 +71,53 @@ namespace GARUD_UI.ViewModel
             }
         }
 
+        public string DisplayMessage
+        {
+            get { return _displayMessage; }
+            set
+            {
+                _displayMessage = value;
+                RaisePropertyChanged("DisplayMessage");
+            }
+        }
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public DatabaseObjectsViewModel()
         {
-            _catalogName = "master";
+            DisplayMessage = string.Empty;
+            //init to default values
+            InstanceName = ".";
+            CatalogName = "master";
+            GetModelDetails(); //Load Databases for default collection
+            _modelObject = new DatabaseObjectModel();            
+            TestCaseList = new ObservableCollection<TablesValidation>();
+            ColumnDesignEvaluation = new ObservableCollection<ColumnDesignCheck>();
+            LoadEvaluationResults();
         }
 
         private void GetModelDetails()
+        {
+            var str = new SqlConnectionStringBuilder
+            {
+                DataSource = InstanceName,
+                InitialCatalog = CatalogName,
+                IntegratedSecurity = true
+
+            };
+            if (!String.IsNullOrEmpty(str.ConnectionString))
+                
+            if (_modelObject != null)
+            {
+                _modelObject.ConnectionString = str.ToString();
+                _modelObject.RunValidationReport();
+                DatabaseNames = _modelObject.DbNamesList;
+                
+            }
+
+        }
+
+        private void LoadEvaluationResults()
         {
             var str = new SqlConnectionStringBuilder
             {
@@ -70,13 +127,23 @@ namespace GARUD_UI.ViewModel
 
             };
             if (!String.IsNullOrEmpty(str.ConnectionString))
-                _modelObject = new DatabaseObjectModel(str.ConnectionString);
-            if (_modelObject != null)
-            {
-                DatabaseNames = _modelObject.DbNamesList;
-                TestCaseList = _modelObject.TestCaseList;
-            }
 
+                if (_modelObject != null)
+                {
+                    _modelObject.ConnectionString = str.ToString();
+                    _modelObject.RunValidationReport();
+                    //Add each item from Model to TC Collection
+                    _modelObject.ValidationList.ForEach(TestCaseList.Add);
+                    //Add each item from Model to Column Validation
+                    _modelObject.ColumnDesignEvaluation.ForEach(ColumnDesignEvaluation.Add);
+
+                }
+            DisplayMessage = "Evaluation results shown below";
+            if (TestCaseList.Count == 0)
+            {
+                DisplayMessage = "The tool did not identify any constraints to evaluate database";
+            }
+            
         }
 
 
@@ -91,15 +158,7 @@ namespace GARUD_UI.ViewModel
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-        public void RefreshScreen()
-        {
-            GetModelDetails();          
-           
-        }
-
-      
-
+        
     }
 
 

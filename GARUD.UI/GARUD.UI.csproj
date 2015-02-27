@@ -60,6 +60,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Command\LoadViewModelCommand.cs" />
     <Compile Include="Model\DatabaseObjectModel.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="ViewModel\DatabaseObjectsViewModel.cs" />

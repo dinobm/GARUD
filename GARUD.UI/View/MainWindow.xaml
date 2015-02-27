@@ -2,13 +2,14 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:local="clr-namespace:GARUD_UI.ViewModel"
-        Title="GARUD.UI" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="WhiteSmoke" >
+        Title="GARUD.UI" Width="Auto" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
     <Window.DataContext>
         <local:DatabaseObjectsViewModel></local:DatabaseObjectsViewModel>
     </Window.DataContext>
-    <Grid Name="OuterLayer" ShowGridLines="False">
+    <Grid Name="OuterLayer"  >
         <Grid.RowDefinitions>
             <RowDefinition Height="0.1*" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="0.6*" />
@@ -16,26 +17,33 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel Orientation="Horizontal" Name="HeaderPanel">
+        <Grid.Resources>
+
+        </Grid.Resources>
+        <StackPanel Orientation="Horizontal" Name="HeaderPanel" HorizontalAlignment="Stretch" Grid.Row="0" Grid.Column="0" Background="IndianRed" >
             <Image Source="../Images/Icon.jpg"></Image>
-        <Label Content="GARUD - Database Validator" FontFamily="Calibri" FontSize="27" Grid.Row="0" FontStyle="Italic" ToolTip="Generate Database Matrix Testcases"
-               FontWeight="Bold" />
+
+            <Label Content="G.A.R.U.D" FontFamily="Calibri" FontSize="27" ToolTip="Generate Database Matrix Testcases" Foreground="White"
+                   FontWeight="Bold" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto"/>
         </StackPanel>
 
-        <Border Padding="3" BorderBrush="LightGray" Grid.Row="1" Grid.Column="0" Width="Auto">
-            <Grid Name="InputDataGrid">
+        <Label Grid.Row="1" Content="GARUD Input" FontWeight="DemiBold"></Label>
+
+
+        <Border Padding="1" BorderBrush="LightGray" Grid.Row="2" Grid.Column="0" Width="Auto" BorderThickness="0.25">
+            <Grid Name="InputDataGrid" >
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"></ColumnDefinition>
-                    <ColumnDefinition Width="0.165*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.15*"></ColumnDefinition>
-                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
                     <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.3*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.35*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.2*"></ColumnDefinition>
+                    <ColumnDefinition Width="0.1*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Label Content="Database Instance: " Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left"   />
-                <TextBox  Name="DatabaseInstanceTextBox" LostFocus="DatabaseInstanceTextBox_LostFocus" Width="150" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" >
+                <Label Content="Enter database instance: " Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" FontWeight="DemiBold"  />
+                <TextBox  Name="DatabaseInstanceTextBox" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Text="{Binding InstanceName,  Mode=TwoWay, UpdateSourceTrigger=LostFocus}"  Width="150"  >
                     <TextBox.Style>
                         <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
                             <Style.Resources>
@@ -60,31 +68,70 @@
                     </TextBox.Style>
                 </TextBox>
 
-                <Label Content="Databases" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left"   />
-                <ComboBox  Name="DatabaseNamesComboBox" Width="150" HorizontalAlignment="Left"
-                          ItemsSource="{Binding Path=DatabaseNames}" Grid.Row="0" Grid.Column="3"></ComboBox >
-                <Button Content="Generate Reports"   Click="Button_Click" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="4" />
-
+                <Label Content="Select database to evaluate" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Left" FontWeight="DemiBold"  />
+                <ComboBox  Name="DatabaseNamesComboBox" Width="175" HorizontalAlignment="Left" SelectedItem="{Binding CatalogName, Mode=TwoWay}"
+                          ItemsSource="{Binding Path=DatabaseNames}" Grid.Row="0" Grid.Column="3" IsSynchronizedWithCurrentItem="True" ></ComboBox >
             </Grid>
-
         </Border>
-            
-        
-        
-        <StackPanel Grid.Row="2">
-            <TextBlock Name="DisplayMessageBox"></TextBlock>
-        </StackPanel>
-        
-         <TabControl Name="ReportTabs" Grid.Row="3" Width="Auto" Height="Auto">
-                <TabItem Header="Test Cases Checklist">
-                    <DataGrid Name="TestCaseSet" AutoGenerateColumns="False" ItemsSource="{Binding TestCaseList}" >
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="UID Matrix Test Case" Width="*" IsReadOnly="True"
+
+        <TextBlock Name="DisplayMessageBox" Text="{Binding DisplayMessage}" Grid.Row="3" ></TextBlock>
+
+        <TabControl Name="ReportTabs" Grid.Row="4" Width="Auto" Height="Auto" >
+            <TabItem Header="Test Cases Checklist">
+                <DataGrid Name="TestCaseSet" AutoGenerateColumns="False" ItemsSource="{Binding TestCaseList}" AlternatingRowBackground="Lavender">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="Background" Value="IndianRed" />
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Database Table Schema" Width="0.15*" IsReadOnly="True"
+                                               Binding="{Binding SchemaName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Database Table Name" Width="0.15*" IsReadOnly="True"
+                                               Binding="{Binding TableName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="UID Matrix Test Case" Width="0.7*" IsReadOnly="True"
                                                Binding="{Binding TestCaseName}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </TabItem>
-            </TabControl>
-        
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+            <TabItem Header="Design Consistency">
+                <DataGrid Name="DesignResultsGrid" AutoGenerateColumns="False" ItemsSource="{Binding ColumnDesignEvaluation}" AlternatingRowBackground="Lavender">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="{x:Type DataGridColumnHeader}">
+                            <Setter Property="FontWeight"  Value="Bold" />
+                            <Setter Property="Background" Value="IndianRed" />
+                            <Setter Property="Foreground" Value="White" />
+                            <Setter Property="HorizontalAlignment" Value="Stretch"></Setter>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Database Table Schema" Width="0.15*" IsReadOnly="True"
+                                               Binding="{Binding SchemaName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Database Table Name" Width="0.15*" IsReadOnly="True"
+                                               Binding="{Binding TableName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Database Column Name" Width="0.2*" IsReadOnly="True"
+                                               Binding="{Binding ColumnName}"></DataGridTextColumn>
+                        <DataGridTextColumn Header="Nullable Flag Check" Width="0.2*" IsReadOnly="True"
+                                               Binding="{Binding NullableFieldMismatch}"></DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Data Type Check" Width="0.2*" IsReadOnly="True"
+                                               Binding="{Binding DataTypeMismatch}"></DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Max Length Check" Width="0.2*" IsReadOnly="True"
+                                               Binding="{Binding MaxSizeMismatch}"></DataGridTextColumn>
+
+                        <DataGridTextColumn Header="Octet Length Check" Width="0.2*" IsReadOnly="True"
+                                               Binding="{Binding OctetSizeMismatch}"></DataGridTextColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+        </TabControl>
+
     </Grid>
 </Window>
